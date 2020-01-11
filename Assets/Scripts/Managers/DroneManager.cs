@@ -4,6 +4,8 @@ using UnityEngine.Events;
 
 public class DroneManager : MonoBehaviour
 {
+    #region PUBLIC FIELDS
+
     public UnityEvent FlightFinished;
 
     public Transform ModelRoot;
@@ -12,14 +14,17 @@ public class DroneManager : MonoBehaviour
 
     public float Speed;
 
+    #endregion
+
+    #region PRIVATE FIEDLS
+
     private SplineBuilder splineBuilder;
 
-    private float flightStartTime;    
+    private float flightStartTime;
 
-    private void Start()
-    {
-        gameObject.SetActive(false);
-    }
+    #endregion
+
+    #region PUBLIC METHODS
 
     public void FlyByPath(Vector3[] path)
     {
@@ -33,6 +38,21 @@ public class DroneManager : MonoBehaviour
         flightStartTime = Time.time;
     }
 
+    public void CancelFlight()
+    {
+        FlightFinished.Invoke();
+        gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    #region PRIVATE METHODS
+
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     private Vector3 GetGroundedPoint(Vector3 point)
     {
         RaycastHit hitResult;
@@ -41,12 +61,6 @@ public class DroneManager : MonoBehaviour
             return hitResult.point + Vector3.up * LandingOffset;
         }
         return point;
-    }
-
-    public void CancelFlight()
-    {
-        FlightFinished.Invoke();
-        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -63,8 +77,10 @@ public class DroneManager : MonoBehaviour
         lookDirection.y = 0;
 
         transform.position = splineBuilder.GetPositionAtTime(t);
-        ModelRoot.rotation = Quaternion.Lerp(ModelRoot.rotation, 
-            Quaternion.LookRotation(lookDirection), 
+        ModelRoot.rotation = Quaternion.Lerp(ModelRoot.rotation,
+            Quaternion.LookRotation(lookDirection),
             Time.deltaTime);
     }
+
+    #endregion
 }

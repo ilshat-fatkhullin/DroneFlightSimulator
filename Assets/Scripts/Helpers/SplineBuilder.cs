@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class SplineBuilder
 {
-    private Vector3[,] coefficients;
-
-    private Vector3[] points;
+    private readonly Vector3[,] coefficients;
 
     private float[] distanceBetweenPoints;
 
@@ -13,7 +11,6 @@ public class SplineBuilder
 
     public SplineBuilder(Vector3[] points)
     {
-        this.points = points;
         distanceBetweenPoints = new float[points.Length - 1];
 
         for (int i = 0; i < distanceBetweenPoints.Length; i++)

@@ -4,9 +4,15 @@ using UnityEngine.EventSystems;
 
 public class UserInputController : MonoBehaviour
 {
+    #region PUBLIC FIELDS
+
     public static UserInputController Instance { get { return Singleton<UserInputController>.Instance; } }
 
     public PointSelectionEvent OnPointSelected = new PointSelectionEvent();
+
+    #endregion
+
+    #region PRIVATE METHODS
 
     private void Update()
     {
@@ -22,6 +28,8 @@ public class UserInputController : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }
 
 public class PointSelectionEvent : UnityEvent<Vector3>

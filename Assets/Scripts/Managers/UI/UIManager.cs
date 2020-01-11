@@ -2,6 +2,8 @@
 
 public class UIManager : MonoBehaviour
 {
+    #region PUBLIC FIELDS
+
     public enum UIState { None, ChoosingSourcePoint, ChoosingDestinationPoint, Simulation }
 
     public Changable<UIState> CurrentUIState = new Changable<UIState>(UIState.None);
@@ -14,28 +16,9 @@ public class UIManager : MonoBehaviour
 
     public Changable<bool> DestinationPointSet = new Changable<bool>(false);
 
-    private void Start()
-    {
-        UserInputController.Instance.OnPointSelected.AddListener(OnPointSelected);
-        FlightSimulationController.Instance.FlightFinished.AddListener(OnFlightFinished);
-    }
+    #endregion
 
-    private void OnPointSelected(Vector3 point)
-    {
-        switch (CurrentUIState.Value)
-        {
-            case UIState.ChoosingSourcePoint:
-                SourcePoint.Value = point;
-                SourcePointSet.Value = true;
-                CurrentUIState.Value = UIState.None;
-                break;
-            case UIState.ChoosingDestinationPoint:
-                DestinationPoint.Value = point;
-                DestinationPointSet.Value = true;
-                CurrentUIState.Value = UIState.None;
-                break;
-        }
-    }
+    #region PUBLIC METHODS
 
     public void CmdChooseSourcePoint()
     {
@@ -62,8 +45,37 @@ public class UIManager : MonoBehaviour
         CurrentUIState.Value = UIState.None;
     }
 
+    #endregion
+
+    #region PRIVATE METHODS
+
+    private void Start()
+    {
+        UserInputController.Instance.OnPointSelected.AddListener(OnPointSelected);
+        FlightSimulationController.Instance.FlightFinished.AddListener(OnFlightFinished);
+    }
+
+    private void OnPointSelected(Vector3 point)
+    {
+        switch (CurrentUIState.Value)
+        {
+            case UIState.ChoosingSourcePoint:
+                SourcePoint.Value = point;
+                SourcePointSet.Value = true;
+                CurrentUIState.Value = UIState.None;
+                break;
+            case UIState.ChoosingDestinationPoint:
+                DestinationPoint.Value = point;
+                DestinationPointSet.Value = true;
+                CurrentUIState.Value = UIState.None;
+                break;
+        }
+    }
+
     private void OnFlightFinished()
     {
         CurrentUIState.Value = UIState.None;
     }
+
+    #endregion
 }

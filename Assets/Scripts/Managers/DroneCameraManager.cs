@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Drone Camera Manager.
+/// Controls switching between first and third person cameras.
+/// </summary>
 public class DroneCameraManager : MonoBehaviour
 {
     public Camera ThirdPersonCamera;

@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class AStarPathfinding
 {
-    Point3DEqualityComparer comparer = new Point3DEqualityComparer();
+    #region PRIVATE FIELDS
 
-    HashSet<Point3D> openSet = new HashSet<Point3D>(new Point3DEqualityComparer());
-    HashSet<Point3D> closedSet = new HashSet<Point3D>(new Point3DEqualityComparer());
+    private Point3DEqualityComparer comparer = new Point3DEqualityComparer();
+
+    private HashSet<Point3D> openSet = new HashSet<Point3D>(new Point3DEqualityComparer());
+
+    private HashSet<Point3D> closedSet = new HashSet<Point3D>(new Point3DEqualityComparer());
 
     //cost of start to this key node
-    Dictionary<Point3D, int> gScore = new Dictionary<Point3D, int>(new Point3DEqualityComparer());
-    //cost of start to goal, passing through key node
-    Dictionary<Point3D, int> fScore = new Dictionary<Point3D, int>(new Point3DEqualityComparer());
+    private Dictionary<Point3D, int> gScore = new Dictionary<Point3D, int>(new Point3DEqualityComparer());
 
-    Dictionary<Point3D, Point3D> nodeLinks = new Dictionary<Point3D, Point3D>(new Point3DEqualityComparer());
+    //cost of start to goal, passing through key node
+    private Dictionary<Point3D, int> fScore = new Dictionary<Point3D, int>(new Point3DEqualityComparer());
+
+    private Dictionary<Point3D, Point3D> nodeLinks = new Dictionary<Point3D, Point3D>(new Point3DEqualityComparer());
+
+    #endregion
+
+    #region PUBLIC FIELDS
 
     public List<Point3D> FindPath(bool[,,] graph, Point3D start, Point3D goal)
     {
-
         openSet.Add(start);
         gScore[start] = 0;
         fScore[start] = Heuristic(start, goal);
@@ -58,29 +65,6 @@ public class AStarPathfinding
         }
 
         return null;
-    }
-
-    private int Heuristic(Point3D start, Point3D goal)
-    {
-        var dx = goal.X - start.X;
-        var dy = goal.Y - start.Y;
-        var dz = goal.Z - start.Z;
-        return Math.Abs(dx) + Math.Abs(dy) + Math.Abs(dz);
-    }
-
-    private int GetGScore(Point3D pt)
-    {
-        int score = int.MaxValue;
-        gScore.TryGetValue(pt, out score);
-        return score;
-    }
-
-
-    private int GetFScore(Point3D pt)
-    {
-        int score = int.MaxValue;
-        fScore.TryGetValue(pt, out score);
-        return score;
     }
 
     public static IEnumerable<Point3D> Neighbors(bool[,,] graph, Point3D center)
@@ -124,6 +108,30 @@ public class AStarPathfinding
 
         return matrix[x, y, z];
 
+    }
+
+    #endregion
+
+    private int Heuristic(Point3D start, Point3D goal)
+    {
+        var dx = goal.X - start.X;
+        var dy = goal.Y - start.Y;
+        var dz = goal.Z - start.Z;
+        return Math.Abs(dx) + Math.Abs(dy) + Math.Abs(dz);
+    }
+
+    private int GetGScore(Point3D pt)
+    {
+        int score = int.MaxValue;
+        gScore.TryGetValue(pt, out score);
+        return score;
+    }
+
+    private int GetFScore(Point3D pt)
+    {
+        int score = int.MaxValue;
+        fScore.TryGetValue(pt, out score);
+        return score;
     }
 
     private List<Point3D> Reconstruct(Point3D start, Point3D current)

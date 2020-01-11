@@ -2,30 +2,57 @@
 
 public class MouseOrbit: MonoBehaviour
 {
+    #region PUBLIC FIELDS
 
     public Transform Target;
+
     public float Distance = 5.0f;
+
     public float XSpeed = 120.0f;
+
     public float YSpeed = 120.0f;
 
     public float YMinLimit = -20f;
+
     public float YMaxLimit = 80f;
 
     public float DistanceMin = .5f;
+
     public float DistanceMax = 15f;
 
-    float x = 0.0f;
-    float y = 0.0f;
+    #endregion
 
-    // Use this for initialization
-    void Start()
+    #region PRIVATE FIELDS
+
+    private float x = 0.0f;
+
+    private float y = 0.0f;
+
+    #endregion
+
+    #region PUBLIC METHODS
+
+    public static float ClampAngle(float angle, float min, float max)
+    {
+        if (angle < -360F)
+            angle += 360F;
+        if (angle > 360F)
+            angle -= 360F;
+        return Mathf.Clamp(angle, min, max);
+    }
+
+    #endregion
+
+    #region PRIVATE METHODS
+
+    private void Start()
     {
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (Target)
         {
@@ -51,12 +78,5 @@ public class MouseOrbit: MonoBehaviour
         }
     }
 
-    public static float ClampAngle(float angle, float min, float max)
-    {
-        if (angle < -360F)
-            angle += 360F;
-        if (angle > 360F)
-            angle -= 360F;
-        return Mathf.Clamp(angle, min, max);
-    }
+    #endregion
 }
