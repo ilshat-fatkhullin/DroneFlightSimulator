@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -61,6 +62,13 @@ public class FlightSimulationController : MonoBehaviour
             FlightFinished.Invoke();
             return;
         }
+
+        List<Vector3> points = new List<Vector3>(path);
+
+        points.Insert(0, Source.position);
+        points.Add(Destination.position);
+
+        path = points.ToArray();
 
         DroneManager.FlyByPath(path);
     }

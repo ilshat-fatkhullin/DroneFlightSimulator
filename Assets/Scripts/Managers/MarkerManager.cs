@@ -22,7 +22,7 @@ public class MarkerManager : MonoBehaviour
 
     private void OnSourcePointChanged()
     {
-        SourcePointMarker.transform.position = SpaceNavMesh.GetClosestFreePosition(UIManager.SourcePoint.Value);
+        SourcePointMarker.transform.position = UIManager.SourcePoint.Value;
     }
 
     private void OnSourcePointSetChanged()
@@ -32,7 +32,7 @@ public class MarkerManager : MonoBehaviour
 
     private void OnDestinationPointChanged()
     {
-        DestinationPointMarker.transform.position = SpaceNavMesh.GetClosestFreePosition(UIManager.DestinationPoint.Value);
+        DestinationPointMarker.transform.position = UIManager.DestinationPoint.Value;
     }
 
     private void OnDestinationPointSetChanged()

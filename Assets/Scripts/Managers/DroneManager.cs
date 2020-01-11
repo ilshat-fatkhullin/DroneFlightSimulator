@@ -28,12 +28,7 @@ public class DroneManager : MonoBehaviour
 
     public void FlyByPath(Vector3[] path)
     {
-        List<Vector3> points = new List<Vector3>(path);
-
-        points.Insert(0, GetGroundedPoint(path[0]));
-        points.Add(GetGroundedPoint(path[path.Length - 1]));
-
-        splineBuilder = new SplineBuilder(points.ToArray());
+        splineBuilder = new SplineBuilder(path);
         gameObject.SetActive(true);
         flightStartTime = Time.time;
     }
