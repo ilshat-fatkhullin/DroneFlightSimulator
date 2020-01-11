@@ -7,23 +7,61 @@ public class SplineBuilder
 
     private Vector3[] points;
 
+    private float[] distanceBetweenPoints;
+
+    public float FlightTime { get; private set; }
+
     public SplineBuilder(Vector3[] points)
     {
         this.points = points;
+        distanceBetweenPoints = new float[points.Length - 1];
+
+        for (int i = 0; i < distanceBetweenPoints.Length; i++)
+        {
+            distanceBetweenPoints[i] = Vector3.Distance(points[i], points[i + 1]);
+            FlightTime += distanceBetweenPoints[i];
+        }
+
         coefficients = CalculateCoefficients(points);
     }
 
     public bool IsFinishedAtTime(float t)
     {
-        return t >= points.Length;
+        int i = 0;
+        while (i < distanceBetweenPoints.Length && distanceBetweenPoints[i] < t)
+        {
+            t -= distanceBetweenPoints[i];
+            i++;
+        }
+        return i == distanceBetweenPoints.Length;
     }
 
     public Vector3 GetPositionAtTime(float t)
     {
-        if (IsFinishedAtTime(t))
-            return points[points.Length - 1];
+        int splineIndex = 0;
+        while (distanceBetweenPoints[splineIndex] < t)
+        {
+            t -= distanceBetweenPoints[splineIndex];
+            splineIndex++;
+        }
 
-        return GetSplineAtTime(coefficients, t);
+        t /= distanceBetweenPoints[splineIndex];
+
+        return coefficients[splineIndex, 0] + coefficients[splineIndex, 1] * t + coefficients[splineIndex, 2] * t * t + coefficients[splineIndex, 3] * t * t * t;
+    }
+
+    public Vector3 GetSpeedAtTime(float t)
+    {
+        int splineIndex = 0;
+        while (distanceBetweenPoints[splineIndex] < t)
+        {
+            t -= distanceBetweenPoints[splineIndex];
+            splineIndex++;
+        }
+
+        t /= distanceBetweenPoints[splineIndex];
+
+        return coefficients[splineIndex, 1] + 2 * coefficients[splineIndex, 2] * t + 3 * coefficients[splineIndex, 3] * t * t;
     }
 
     public static Vector2[] GetSplinePoints(Vector2[] points, float step)

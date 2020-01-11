@@ -6,11 +6,15 @@ public class DroneManager : MonoBehaviour
 {
     public UnityEvent FlightFinished;
 
-    private SplineBuilder splineBuilder;
-
-    private float flightStartTime;
+    public Transform ModelRoot;
 
     public float LandingOffset;
+
+    public float Speed;
+
+    private SplineBuilder splineBuilder;
+
+    private float flightStartTime;    
 
     private void Start()
     {
@@ -47,13 +51,20 @@ public class DroneManager : MonoBehaviour
 
     private void Update()
     {
-        float t = Time.time - flightStartTime;
+        float t = (Time.time - flightStartTime) * Speed;
 
         if (splineBuilder.IsFinishedAtTime(t))
         {
             CancelFlight();
+            return;
         }
 
+        Vector3 lookDirection = splineBuilder.GetSpeedAtTime(t).normalized;
+        lookDirection.y = 0;
+
         transform.position = splineBuilder.GetPositionAtTime(t);
+        ModelRoot.rotation = Quaternion.Lerp(ModelRoot.rotation, 
+            Quaternion.LookRotation(lookDirection), 
+            Time.deltaTime);
     }
 }
