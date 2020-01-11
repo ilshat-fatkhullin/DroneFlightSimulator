@@ -49,7 +49,5 @@ public class UIManager : MonoBehaviour
     public void CmdCancel()
     {
         CurrentUIState.Value = UIState.None;
-        SourcePointSet.Value = false;
-        DestinationPointSet.Value = false;
     }
 }

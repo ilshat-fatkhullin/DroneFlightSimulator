@@ -6,6 +6,8 @@ public class MarkerManager : MonoBehaviour
 
     public GameObject DestinationPointMarker;
 
+    public SpaceNavMesh SpaceNavMesh;
+
     public UIManager UIManager;
 
     private void Start()
@@ -14,15 +16,13 @@ public class MarkerManager : MonoBehaviour
         UIManager.SourcePointSet.OnChanged.AddListener(OnSourcePointSetChanged);
         UIManager.DestinationPoint.OnChanged.AddListener(OnDestinationPointChanged);
         UIManager.DestinationPointSet.OnChanged.AddListener(OnDestinationPointSetChanged);
-        OnSourcePointChanged();
         OnSourcePointSetChanged();
-        OnDestinationPointChanged();
         OnDestinationPointSetChanged();
     }
 
     private void OnSourcePointChanged()
     {
-        SourcePointMarker.transform.position = UIManager.SourcePoint.Value;
+        SourcePointMarker.transform.position = SpaceNavMesh.GetClosestFreePosition(UIManager.SourcePoint.Value);
     }
 
     private void OnSourcePointSetChanged()
@@ -32,7 +32,7 @@ public class MarkerManager : MonoBehaviour
 
     private void OnDestinationPointChanged()
     {
-        DestinationPointMarker.transform.position = UIManager.DestinationPoint.Value;
+        DestinationPointMarker.transform.position = SpaceNavMesh.GetClosestFreePosition(UIManager.DestinationPoint.Value);
     }
 
     private void OnDestinationPointSetChanged()
