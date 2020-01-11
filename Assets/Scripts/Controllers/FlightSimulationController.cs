@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class FlightSimulationController : MonoBehaviour
 {
     public static FlightSimulationController Instance { get { return Singleton<FlightSimulationController>.Instance; } }
+
+    public UnityEvent FlightFinished;
+
+    public DroneManager DroneManager;
 
     public SpaceNavMesh SpaceNavMesh;
 
@@ -12,9 +17,32 @@ public class FlightSimulationController : MonoBehaviour
 
     private Vector3[] path;
 
+    private void Start()
+    {
+        DroneManager.FlightFinished.AddListener(OnFlightFinished);
+    }
+
+    private void OnFlightFinished()
+    {
+        FlightFinished.Invoke();
+    }
+
     public void SimulateFlight()
     {
         path = SpaceNavMesh.FindPath(Source.position, Destination.position);
+
+        if (path == null)
+        {
+            FlightFinished.Invoke();
+            return;
+        }
+
+        DroneManager.FlyByPath(path);
+    }
+
+    public void CancelFlight()
+    {
+        DroneManager.CancelFlight();
     }
 
     private void OnDrawGizmos()

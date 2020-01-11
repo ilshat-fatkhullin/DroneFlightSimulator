@@ -2,7 +2,7 @@
 
 public class UIManager : MonoBehaviour
 {
-    public enum UIState { None, ChoosingSourcePoint, ChoosingDestinationPoint }
+    public enum UIState { None, ChoosingSourcePoint, ChoosingDestinationPoint, Simulation }
 
     public Changable<UIState> CurrentUIState = new Changable<UIState>(UIState.None);
 
@@ -16,7 +16,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        UserInputController.Instance.OnPointSelected.AddListener(OnPointSelected);        
+        UserInputController.Instance.OnPointSelected.AddListener(OnPointSelected);
+        FlightSimulationController.Instance.FlightFinished.AddListener(OnFlightFinished);
     }
 
     private void OnPointSelected(Vector3 point)
@@ -46,7 +47,22 @@ public class UIManager : MonoBehaviour
         CurrentUIState.Value = UIState.ChoosingDestinationPoint;
     }
 
+    public void CmdSimulate()
+    {
+        CurrentUIState.Value = UIState.Simulation;
+        FlightSimulationController.Instance.SimulateFlight();
+    }
+
     public void CmdCancel()
+    {
+        if (CurrentUIState.Value == UIState.Simulation)
+        {
+            FlightSimulationController.Instance.CancelFlight();
+        }
+        CurrentUIState.Value = UIState.None;
+    }
+
+    private void OnFlightFinished()
     {
         CurrentUIState.Value = UIState.None;
     }

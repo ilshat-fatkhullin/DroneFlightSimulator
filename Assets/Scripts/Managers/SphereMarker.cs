@@ -6,7 +6,10 @@ public class SphereMarker : MonoBehaviour
 
     private void Update()
     {
-        float distance = Vector3.Distance(Camera.main.transform.position, transform.position);
+        if (!Camera.current)
+            return;
+
+        float distance = Vector3.Distance(Camera.current.transform.position, transform.position);
         transform.localScale = Vector3.one * Size * distance;
     }
 }

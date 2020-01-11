@@ -57,8 +57,7 @@ public class AStarPathfinding
             }
         }
 
-        Debug.Log("Path not found");
-        return new List<Point3D>();
+        return null;
     }
 
     private int Heuristic(Point3D start, Point3D goal)

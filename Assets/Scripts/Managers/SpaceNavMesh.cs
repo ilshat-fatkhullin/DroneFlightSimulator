@@ -58,6 +58,10 @@ public class SpaceNavMesh : MonoBehaviour
 
         AStarPathfinding aStarPathfinding = new AStarPathfinding();
         List<Point3D> path = aStarPathfinding.FindPath(environmentMap, sourceCell, destinationCell);
+
+        if (path == null)
+            return null;
+
         Vector3[] result = new Vector3[path.Count];
         for (int i = 0; i < result.Length; i++)
         {

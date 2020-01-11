@@ -20,17 +20,13 @@ public class UIPanelSwitcher : MonoBehaviour
     {
         switch (UIManager.CurrentUIState.Value)
         {
-            case UIManager.UIState.ChoosingSourcePoint:
-                ChooseButtonsPanel.SetActive(false);
-                CancelButtonPanel.SetActive(true);
-                break;
-            case UIManager.UIState.ChoosingDestinationPoint:
-                ChooseButtonsPanel.SetActive(false);
-                CancelButtonPanel.SetActive(true);
-                break;
             case UIManager.UIState.None:
                 ChooseButtonsPanel.SetActive(true);
                 CancelButtonPanel.SetActive(false);
+                break;
+            default:
+                ChooseButtonsPanel.SetActive(false);
+                CancelButtonPanel.SetActive(true);
                 break;
         }
     }
